@@ -18,9 +18,6 @@ plugins {
     id 'maven-publish'
     id 'com.bmuschko.nexus' version '2.3.1'
     id 'io.codearte.nexus-staging' version '0.11.0'
-
-    // For code coverage reports
-    id 'jacoco'
 }
 
 group 'net.jacobpeterson'
@@ -45,3 +42,63 @@ dependencies {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+javadoc {
+    // Used to suppress Javadoc linting warnings
+    options.addStringOption('Xdoclint:none', '-quiet')
+    // Explicitly define Charset for Javadocs
+    options.addStringOption("charset", "UTF-8")
+    // Add Java SE 8 link
+    options.addStringOption("link", "https://docs.oracle.com/javase/8/docs/api/")
+}
+
+//
+// START Publishing
+//
+modifyPom {
+    project {
+        name = 'TimeSeriesDataStore'
+        description = 'A Java API to store and iterate over time series data retrieved from a data feed and stored in a database.'
+        url = 'https://github.com/Petersoj/TimeSeriesDataStore'
+        inceptionYear = '2021'
+
+        licenses {
+            license {
+                name = 'MIT License'
+                url = 'https://opensource.org/licenses/MIT'
+            }
+        }
+
+        developers {
+            developer {
+                id = 'Petersoj'
+                name = 'Jacob Peterson'
+            }
+        }
+
+        scm {
+            url = "https://github.com/Petersoj/TimeSeriesDataStore.git"
+            connection = "scm:git:https://github.com/Petersoj/TimeSeriesDataStore.git"
+            developerConnection = "scm:git:git@github.com/Petersoj/TimeSeriesDataStore.git"
+        }
+    }
+}
+
+extraArchive {
+    sources = true
+    tests = true
+    javadoc = true
+}
+
+nexus {
+    sign = true
+    repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+    snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+}
+
+nexusStaging {
+    packageGroup = "net.jacobpeterson"
+}
+//
+// END Publishing
+//
