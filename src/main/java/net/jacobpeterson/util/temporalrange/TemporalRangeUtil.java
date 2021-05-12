@@ -1,4 +1,4 @@
-package net.jacobpeterson.util.datetime;
+package net.jacobpeterson.util.temporalrange;
 
 import com.google.common.base.Preconditions;
 
@@ -10,9 +10,9 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * {@link DateTimeUtil} contains several utility methods for date/time objects and for {@link TemporalRange}s.
+ * {@link TemporalRangeUtil} contains several utility methods for date/time objects and for {@link TemporalRange}s.
  */
-public final class DateTimeUtil {
+public final class TemporalRangeUtil {
 
     /**
      * Gets missing {@link TemporalRange}s from found/valid {@link TemporalRange}s (basically invert {@link

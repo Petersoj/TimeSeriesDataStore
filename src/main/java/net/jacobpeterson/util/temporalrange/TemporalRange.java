@@ -1,4 +1,4 @@
-package net.jacobpeterson.util.datetime;
+package net.jacobpeterson.util.temporalrange;
 
 import java.time.temporal.Temporal;
 import java.util.Objects;
