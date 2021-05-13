@@ -35,7 +35,7 @@ import static org.jooq.impl.DSL.val;
  *
  * @param <K> the type parameter of the key used for the time series data table and the timestamp ranges table
  * @param <R> the time series data {@link Record} type parameter
- * @param <P> the time series POJO type parameter
+ * @param <P> the time series data POJO type parameter
  * @param <T> the timestamp {@link Record3} type parameter (value1 being the table key, value2 being the 'from' and
  *            value3 being the 'to')
  */
@@ -186,7 +186,7 @@ public abstract class TimeSeriesDatabaseInterface<K, R extends Record, P,
                 getDataTimestampTableField().asc() :
                 getDataTimestampTableField().desc();
 
-        final RecordMapper<R, P> tickerDataRecordMapper = getDataRecordMapper();
+        final RecordMapper<R, P> dataRecordMapper = getDataRecordMapper();
         final Cursor<R> recordCursor = dslCreate.selectFrom(getDataTable())
                 .where(keyEqualCondition.and(timestampRangeCondition).and(timestampFilterCondition))
                 .orderBy(orderByField)
@@ -201,7 +201,7 @@ public abstract class TimeSeriesDatabaseInterface<K, R extends Record, P,
 
             @Override
             public P next() {
-                return recordCursor.fetchNext(tickerDataRecordMapper);
+                return recordCursor.fetchNext(dataRecordMapper);
             }
         };
     }
