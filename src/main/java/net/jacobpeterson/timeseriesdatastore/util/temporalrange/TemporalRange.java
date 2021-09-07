@@ -1,10 +1,10 @@
-package net.jacobpeterson.util.temporalrange;
+package net.jacobpeterson.timeseriesdatastore.util.temporalrange;
 
 import java.time.temporal.Temporal;
 import java.util.Objects;
 
 /**
- * {@link TemporalRange} represents a {@link Temporal} 'from' and 'to'.
+ * {@link TemporalRange} represents a {@link Temporal} a <code>from</code> and a <code>to</code> time.
  */
 public class TemporalRange<T extends Temporal> {
 
@@ -14,8 +14,8 @@ public class TemporalRange<T extends Temporal> {
     /**
      * Instantiates a new {@link TemporalRange}.
      *
-     * @param from the 'from'
-     * @param to   the 'to'
+     * @param from the from
+     * @param to   the to
      */
     public TemporalRange(T from, T to) {
         this.from = from;

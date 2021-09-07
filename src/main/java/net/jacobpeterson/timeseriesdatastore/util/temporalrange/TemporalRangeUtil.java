@@ -1,6 +1,4 @@
-package net.jacobpeterson.util.temporalrange;
-
-import com.google.common.base.Preconditions;
+package net.jacobpeterson.timeseriesdatastore.util.temporalrange;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -8,6 +6,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * {@link TemporalRangeUtil} contains several utility methods for date/time objects and for {@link TemporalRange}s.
@@ -18,35 +19,34 @@ public final class TemporalRangeUtil {
      * Gets missing {@link TemporalRange}s from found/valid {@link TemporalRange}s (basically invert {@link
      * TemporalRange}s given in the validTemporalRanges on a timeline).
      *
-     * @param from                  the from (inclusive)
-     * @param to                    the to (inclusive)
-     * @param validTemporalRanges   the valid {@link TemporalRange} (the 'from's MUST be sorted from oldest to newest)
-     *                              (this method infers that the 'from' and 'to' in the {@link TemporalRange} are
-     *                              inclusive of their associated {@link LocalDateTime}s)
-     * @param fromExclusivityOffset added to a 'from' {@link LocalDateTime} in a returned {@link TemporalRange} (to
-     *                              enable exclusivity for {@link TemporalRange}s) (null for no offset)
-     * @param toExclusivityOffset   subtracted from a 'to' {@link LocalDateTime} in a returned {@link TemporalRange} (to
-     *                              enable exclusivity for {@link TemporalRange}s) (null for no offset)
+     * @param from                  the from {@link LocalDateTime} (inclusive)
+     * @param to                    the to {@link LocalDateTime} (inclusive)
+     * @param validTemporalRanges   the valid {@link TemporalRange}s (the {@link TemporalRange#getFrom()}s MUST be
+     *                              sorted from oldest to newest) (this method infers that the {@link
+     *                              TemporalRange#getFrom()} and {@link TemporalRange#getTo()} in the {@link
+     *                              TemporalRange} are inclusive of their associated {@link LocalDateTime}s)
+     * @param fromExclusivityOffset added to a {@link TemporalRange#getFrom()} {@link LocalDateTime} in a returned
+     *                              {@link TemporalRange} (to enable exclusivity for {@link TemporalRange}s)
+     *                              (<code>null</code> for no offset)
+     * @param toExclusivityOffset   subtracted from a {@link TemporalRange#getTo()} {@link LocalDateTime} in a returned
+     *                              {@link TemporalRange} (to enable exclusivity for {@link TemporalRange}s)
+     *                              (<code>null</code> for no offset)
      *
-     * @return an {@link List} of {@link TemporalRange}s with the 'from' and 'to' being inclusive.
-     *
-     * @throws NullPointerException     thrown if a non-nullable argument is null
-     * @throws IllegalArgumentException thrown if an argument is illegal
+     * @return a {@link List} of {@link TemporalRange}s
      */
     public static ArrayList<TemporalRange<LocalDateTime>> getMissingTemporalRanges(
             LocalDateTime from, LocalDateTime to, List<TemporalRange<LocalDateTime>> validTemporalRanges,
-            Duration fromExclusivityOffset, Duration toExclusivityOffset)
-            throws NullPointerException, IllegalArgumentException {
+            Duration fromExclusivityOffset, Duration toExclusivityOffset) {
         // START Check for valid args
 
-        Preconditions.checkNotNull(from);
-        Preconditions.checkNotNull(to);
-        Preconditions.checkArgument(!to.isBefore(from), "From must be before to!"); // Checks that to >= from
+        checkNotNull(from);
+        checkNotNull(to);
+        checkArgument(!to.isBefore(from), "From must be before to!"); // Checks that to >= from
 
         // Create an empty list if null was passed in
         validTemporalRanges = validTemporalRanges == null ? new ArrayList<>() : validTemporalRanges;
 
-        // Sets defaults for exclusivity offsets if necessary
+        // Set defaults for exclusivity offsets if necessary
         fromExclusivityOffset = fromExclusivityOffset == null ? Duration.ZERO : fromExclusivityOffset;
         toExclusivityOffset = toExclusivityOffset == null ? Duration.ZERO : toExclusivityOffset;
 
@@ -144,10 +144,10 @@ public final class TemporalRangeUtil {
      * Squashes the given {@link TemporalRange}s on the timeline, that is, any overlapping {@link TemporalRange}s become
      * one {@link TemporalRange}.
      *
-     * @param temporalRanges the valid {@link TemporalRange} <strong>(the 'from's MUST be sorted from oldest to
-     *                       newest)</strong>
+     * @param temporalRanges the valid {@link TemporalRange} <strong>(the {@link TemporalRange#getFrom()}s MUST be
+     *                       sorted from oldest to newest)</strong>
      *
-     * @return the squashed {@link TemporalRange}s {@link List}
+     * @return a squashed {@link TemporalRange}s {@link List}
      */
     public static List<TemporalRange<LocalDateTime>> squash(List<TemporalRange<LocalDateTime>> temporalRanges) {
         if (temporalRanges == null || temporalRanges.isEmpty()) {
@@ -182,14 +182,15 @@ public final class TemporalRangeUtil {
 
     /**
      * Clamps the given {@link TemporalRange}s on the timeline, that is, any {@link TemporalRange}s that lie outside the
-     * passed in 'from' and 'to' are clamped to the passed in 'from' and 'to'.
+     * passed in <code>from</code> and <code>to</code> are clamped to the passed in <code>from</code> and
+     * <code>to</code>.
      *
-     * @param temporalRanges the valid {@link TemporalRange} <strong>(the 'from's MUST be sorted from oldest to
-     *                       newest)</strong>
-     * @param from           the 'from' to clamp to
-     * @param to             the 'to' to clamp to
+     * @param temporalRanges the valid {@link TemporalRange} <strong>(the {@link TemporalRange#getFrom()}s MUST be
+     *                       sorted from oldest to newest)</strong>
+     * @param from           the from {@link LocalDateTime} to clamp to
+     * @param to             the to {@link LocalDateTime} to clamp to
      *
-     * @return the clamped {@link TemporalRange} {@link List}
+     * @return a clamped {@link TemporalRange} {@link List}
      */
     public static List<TemporalRange<LocalDateTime>> clamp(List<TemporalRange<LocalDateTime>> temporalRanges,
             LocalDateTime from, LocalDateTime to) {
@@ -197,7 +198,7 @@ public final class TemporalRangeUtil {
             return temporalRanges;
         }
 
-        Preconditions.checkArgument(!to.isBefore(from), "From must be before to!"); // Checks that to >= from
+        checkArgument(!to.isBefore(from), "From must be before to!"); // Checks that to >= from
 
         ArrayList<TemporalRange<LocalDateTime>> clampedTemporalRanges = new ArrayList<>();
 
@@ -216,16 +217,16 @@ public final class TemporalRangeUtil {
     }
 
     /**
-     * Clamps the {@link TemporalRange}s on the timeline to {@link TemporalRange}s that are only within the given 'from'
-     * and 'to' {@link LocalTime}s. <strong>This method assumes that NO {@link TemporalRange}s passed in intersect with
-     * another. This can be done via {@link #squash(List)}.</strong>
+     * Clamps the {@link TemporalRange}s on the timeline to {@link TemporalRange}s that are only within the given
+     * <code>from</code> and <code>to</code> {@link LocalTime}s. <strong>This method assumes that NO {@link
+     * TemporalRange}s passed in intersect with another. This can be done via {@link #squash(List)}.</strong>
      *
-     * @param temporalRanges the valid {@link TemporalRange} <strong>(the 'from's MUST be sorted from oldest to
-     *                       newest)</strong>
-     * @param from           the from {@link LocalTime}
-     * @param to             the to {@link LocalTime}
+     * @param temporalRanges the valid {@link TemporalRange} <strong>(the {@link TemporalRange#getFrom()}s MUST be
+     *                       sorted from oldest to newest)</strong>
+     * @param from           the from {@link LocalTime} to clamp to
+     * @param to             the to {@link LocalTime} to clamp to
      *
-     * @return the clamped {@link TemporalRange} {@link List}
+     * @return a clamped {@link TemporalRange} {@link List}
      */
     public static List<TemporalRange<LocalDateTime>> clamp(List<TemporalRange<LocalDateTime>> temporalRanges,
             LocalTime from, LocalTime to) {
@@ -236,7 +237,7 @@ public final class TemporalRangeUtil {
         from = from == null ? LocalTime.MIN : from;
         to = to == null ? LocalTime.MAX : to;
 
-        Preconditions.checkArgument(!to.isBefore(from), "From must be before to!"); // Checks that to >= from
+        checkArgument(!to.isBefore(from), "From must be before to!"); // Checks that to >= from
 
         ArrayList<TemporalRange<LocalDateTime>> clampedTemporalRanges = new ArrayList<>();
 
@@ -267,8 +268,8 @@ public final class TemporalRangeUtil {
     /**
      * Gets the {@link LocalDateTime} that's the furthest in the future.
      *
-     * @param first  the first
-     * @param second the second
+     * @param first  a {@link LocalDateTime}
+     * @param second a {@link LocalDateTime}
      *
      * @return the {@link LocalDateTime} that's the furthest in the future.
      */
@@ -279,8 +280,8 @@ public final class TemporalRangeUtil {
     /**
      * Gets the {@link LocalDateTime} that's the furthest in the past.
      *
-     * @param first  the first
-     * @param second the second
+     * @param first  {@link LocalDateTime}
+     * @param second {@link LocalDateTime}
      *
      * @return the {@link LocalDateTime} that's the furthest in the past.
      */
@@ -289,23 +290,23 @@ public final class TemporalRangeUtil {
     }
 
     /**
-     * Checks if the {@link LocalDateTime} is in between the passed in 'from' and 'to'.
+     * Checks if the {@link LocalDateTime} is in between the passed in <code>from</code> and <code>to</code>.
      *
-     * @param localDateTime the {@link LocalDateTime} to check
-     * @param from          the from
-     * @param to            the to
-     * @param inclusive     if true, then if the 'localDateTime' is equal to the 'from' or the 'to' then this method
-     *                      will return true (aka inclusive of the range limits), otherwise it's exclusive of the range
-     *                      limits.
+     * @param dateTime  the {@link LocalDateTime} to check
+     * @param from      the from {@link LocalDateTime}
+     * @param to        the to {@link LocalDateTime}
+     * @param inclusive if true, then if the <code>dateTime</code> is equal to the <code>from</code> or the
+     *                  <code>to</code> then this method will return true (aka inclusive of the range limits),
+     *                  otherwise it's exclusive of the range limits.
      *
      * @return a boolean
      */
-    public static boolean isBetween(LocalDateTime localDateTime, LocalDateTime from, LocalDateTime to,
+    public static boolean isBetween(LocalDateTime dateTime, LocalDateTime from, LocalDateTime to,
             boolean inclusive) {
-        if (inclusive && (localDateTime.equals(from) || localDateTime.equals(to))) {
+        if (inclusive && (dateTime.equals(from) || dateTime.equals(to))) {
             return true;
         } else {
-            return localDateTime.isAfter(from) && localDateTime.isBefore(to);
+            return dateTime.isAfter(from) && dateTime.isBefore(to);
         }
     }
 

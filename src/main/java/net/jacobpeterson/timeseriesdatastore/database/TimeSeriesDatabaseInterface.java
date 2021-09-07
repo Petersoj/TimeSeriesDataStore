@@ -1,9 +1,8 @@
-package net.jacobpeterson.database;
+package net.jacobpeterson.timeseriesdatastore.database;
 
-import com.google.common.base.Preconditions;
-import net.jacobpeterson.datafeed.TimeSeriesDataFeedInterface;
-import net.jacobpeterson.util.sort.SortDirection;
-import net.jacobpeterson.util.temporalrange.TemporalRange;
+import net.jacobpeterson.timeseriesdatastore.datafeed.TimeSeriesDataFeedInterface;
+import net.jacobpeterson.timeseriesdatastore.util.sort.SortDirection;
+import net.jacobpeterson.timeseriesdatastore.util.temporalrange.TemporalRange;
 import org.jooq.Condition;
 import org.jooq.Cursor;
 import org.jooq.DSLContext;
@@ -23,6 +22,7 @@ import java.time.LocalTime;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static org.jooq.impl.DSL.trueCondition;
 import static org.jooq.impl.DSL.val;
 
@@ -132,7 +132,7 @@ public abstract class TimeSeriesDatabaseInterface<K, R extends Record, P,
      * @throws DataAccessException thrown for {@link DataAccessException}s
      */
     public void insert(P dataPOJO) throws DataAccessException {
-        Preconditions.checkArgument(dataPOJO != null, "The data POJO cannot be null!");
+        checkArgument(dataPOJO != null, "The data POJO cannot be null!");
 
         // Insert the converted POJO to table record into the database data table
         dslCreate.insertInto(getDataTable())
@@ -162,9 +162,9 @@ public abstract class TimeSeriesDatabaseInterface<K, R extends Record, P,
             LocalTime endFilterTime, SortDirection sortDirection)
             throws DataAccessException {
         // Check arguments
-        Preconditions.checkArgument(key != null, "Key cannot be null!");
-        Preconditions.checkArgument(from != null, "From cannot be null!");
-        Preconditions.checkArgument(to != null, "To cannot be null!");
+        checkArgument(key != null, "Key cannot be null!");
+        checkArgument(from != null, "From cannot be null!");
+        checkArgument(to != null, "To cannot be null!");
         sortDirection = sortDirection == null ? SortDirection.ASCENDING : sortDirection;
 
         // Create WHERE clause conditions
@@ -219,9 +219,9 @@ public abstract class TimeSeriesDatabaseInterface<K, R extends Record, P,
      */
     public void insertTimestampRangeRecord(K key, LocalDateTime from, LocalDateTime to) throws DataAccessException {
         // Check arguments
-        Preconditions.checkArgument(key != null, "Key cannot be null!");
-        Preconditions.checkArgument(from != null, "From cannot be null!");
-        Preconditions.checkArgument(to != null, "To cannot be null!");
+        checkArgument(key != null, "Key cannot be null!");
+        checkArgument(from != null, "From cannot be null!");
+        checkArgument(to != null, "To cannot be null!");
 
         // Create the record
         Record3<K, LocalDateTime, LocalDateTime> timestampRangesRecord = dslCreate.newRecord(getTimestampRangesTable());
@@ -256,9 +256,9 @@ public abstract class TimeSeriesDatabaseInterface<K, R extends Record, P,
     public List<TemporalRange<LocalDateTime>> getTimestampRanges(K key, LocalDateTime from, LocalDateTime to,
             SortDirection sortDirection) throws DataAccessException {
         // Check arguments
-        Preconditions.checkArgument(key != null, "Key cannot be null!");
-        Preconditions.checkArgument(from != null, "From cannot be null!");
-        Preconditions.checkArgument(to != null, "To cannot be null!");
+        checkArgument(key != null, "Key cannot be null!");
+        checkArgument(from != null, "From cannot be null!");
+        checkArgument(to != null, "To cannot be null!");
         sortDirection = sortDirection == null ? SortDirection.ASCENDING : sortDirection;
 
         // Create WHERE clause conditions

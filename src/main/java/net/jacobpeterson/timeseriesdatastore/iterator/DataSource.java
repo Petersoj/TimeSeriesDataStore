@@ -1,4 +1,4 @@
-package net.jacobpeterson.iterator;
+package net.jacobpeterson.timeseriesdatastore.iterator;
 
 /**
  * The {@link DataSource} enums defines the source type of data.

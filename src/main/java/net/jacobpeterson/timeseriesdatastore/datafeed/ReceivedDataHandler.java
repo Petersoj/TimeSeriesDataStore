@@ -1,4 +1,4 @@
-package net.jacobpeterson.datafeed;
+package net.jacobpeterson.timeseriesdatastore.datafeed;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package net.jacobpeterson.util.sort;
+package net.jacobpeterson.timeseriesdatastore.util.sort;
 
 /**
  * {@link SortDirection} defines enums that specify a sorting direction.

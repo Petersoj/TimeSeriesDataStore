@@ -1,12 +1,11 @@
 buildscript {
     repositories {
         mavenCentral()
-        jcenter()
     }
 
     dependencies {
+        // For Maven and Maven Central support
         classpath group: 'com.bmuschko', name: 'gradle-nexus-plugin', version: '2.3.1'
-        classpath group: 'org.jsonschema2pojo', name: 'jsonschema2pojo-gradle-plugin', version: '1.0.2'
     }
 }
 
@@ -32,11 +31,10 @@ dependencies {
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
 
     // Google Guava for a variety of useful methods
-    implementation group: 'com.google.guava', name: 'guava', version: '20.0'
+    implementation group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
 
-    // Java SQL ORM
-    // https://www.jooq.org/
-    implementation group: 'org.jooq', name: 'jooq', version: '3.14.9'
+    // Java SQL ORM: jOOQ - https://www.jooq.org
+    implementation group: 'org.jooq', name: 'jooq', version: '3.15.2'
 }
 
 sourceCompatibility = 1.8
@@ -44,12 +42,14 @@ targetCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 javadoc {
+    // Explicitly define source version
+    options.addStringOption('source', '8')
     // Used to suppress Javadoc linting warnings
     options.addStringOption('Xdoclint:none', '-quiet')
     // Explicitly define Charset for Javadocs
-    options.addStringOption("charset", "UTF-8")
+    options.addStringOption('charset', 'UTF-8')
     // Add Java SE 8 link
-    options.addStringOption("link", "https://docs.oracle.com/javase/8/docs/api/")
+    options.addStringOption('link', 'https://docs.oracle.com/javase/8/docs/api/')
 }
 
 //
