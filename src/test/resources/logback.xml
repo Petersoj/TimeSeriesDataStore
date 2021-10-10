@@ -1,0 +1,20 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-5level %date{MM/dd/yyyy hh:mm:ss aa zzz} [%thread] %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="junit" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-5level %date{MM/dd/yyyy hh:mm:ss aa zzz} [%thread] %caller{1} %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <logger name="net.jacobpeterson" level="TRACE" additivity="false">
+        <appender-ref ref="junit"/>
+    </logger>
+</configuration>

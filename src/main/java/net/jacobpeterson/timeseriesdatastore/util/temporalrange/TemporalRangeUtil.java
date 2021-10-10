@@ -37,8 +37,6 @@ public final class TemporalRangeUtil {
     public static ArrayList<TemporalRange<LocalDateTime>> getMissingTemporalRanges(
             LocalDateTime from, LocalDateTime to, List<TemporalRange<LocalDateTime>> validTemporalRanges,
             Duration fromExclusivityOffset, Duration toExclusivityOffset) {
-        // START Check for valid args
-
         checkNotNull(from);
         checkNotNull(to);
         checkArgument(!to.isBefore(from), "From must be before to!"); // Checks that to >= from
@@ -53,10 +51,6 @@ public final class TemporalRangeUtil {
         // Note that we do not check if the passed in 'from + fromExclusivityOffset' and 'to - toExclusivityOffset'
         // overlap because the below logic accounts for overlapping of these 'from' and 'to' offsets.
         // This would occur if the 'from' and 'to' are the same and the offsets are not zero.
-
-        // END Check for valid args
-
-        // START Create missing TemporalRanges
 
         // If validTemporalRanges is empty, return the input from and to
         if (validTemporalRanges.isEmpty()) {

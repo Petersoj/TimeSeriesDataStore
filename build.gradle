@@ -28,13 +28,17 @@ repositories {
 
 dependencies {
     // Logging framework
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.32'
 
     // Google Guava for a variety of useful methods
-    implementation group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
+    implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
 
     // Java SQL ORM: jOOQ - https://www.jooq.org
-    implementation group: 'org.jooq', name: 'jooq', version: '3.15.2'
+    implementation group: 'org.jooq', name: 'jooq', version: '3.15.3'
+
+    // Unit test dependencies
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.6'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.8.1'
 }
 
 sourceCompatibility = 1.8
@@ -50,6 +54,15 @@ javadoc {
     options.addStringOption('charset', 'UTF-8')
     // Add Java SE 8 link
     options.addStringOption('link', 'https://docs.oracle.com/javase/8/docs/api/')
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
 }
 
 //
