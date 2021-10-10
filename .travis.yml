@@ -8,6 +8,12 @@ before_script:
   - chmod +x gradlew
 
 script:
+  # Install OpenJDK 14
+  - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
+  - chmod +x $TRAVIS_BUILD_DIR/install-jdk.sh
+  - export JAVA_HOME=$HOME/openjdk14
+  - $TRAVIS_BUILD_DIR/install-jdk.sh -f 14 --target $JAVA_HOME
+
   - ./gradlew build check jacocoTestReport --stacktrace
 
 after_success:
