@@ -5,13 +5,9 @@ package net.jacobpeterson.timeseriesdatastore.util.sort;
  */
 public enum SortDirection {
 
-    /**
-     * An ascending {@link SortDirection}.
-     */
+    /** An ascending {@link SortDirection}. */
     ASCENDING,
 
-    /**
-     * A descending {@link SortDirection}.
-     */
+    /** A descending {@link SortDirection}. */
     DESCENDING
 }

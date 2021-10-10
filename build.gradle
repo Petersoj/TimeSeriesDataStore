@@ -17,6 +17,9 @@ plugins {
     id 'maven-publish'
     id 'com.bmuschko.nexus' version '2.3.1'
     id 'io.codearte.nexus-staging' version '0.11.0'
+
+    // For code coverage reports
+    id 'jacoco'
 }
 
 group 'net.jacobpeterson'
@@ -64,6 +67,14 @@ test {
         exceptionFormat "full"
     }
 }
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
+}
+jacocoTestReport.dependsOn check
 
 //
 // START Publishing

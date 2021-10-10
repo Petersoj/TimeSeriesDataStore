@@ -1,6 +1,5 @@
 package net.jacobpeterson.timeseriesdatastore.database;
 
-import net.jacobpeterson.timeseriesdatastore.datafeed.TimeSeriesDataFeedInterface;
 import net.jacobpeterson.timeseriesdatastore.util.sort.SortDirection;
 import net.jacobpeterson.timeseriesdatastore.util.temporalrange.TemporalRange;
 import org.jooq.Condition;
@@ -31,7 +30,7 @@ import static org.jooq.impl.DSL.val;
  * table and a timestamp ranges table. The data table contains records with time series data (data with a timestamp
  * field). The timestamp ranges table contains records that define the valid time ranges that exist in the time series
  * data table. Not only does this provide fast lookup for what date ranges do not exist in the data table, but it also
- * defines what timestamp ranges have already been fetched by the {@link TimeSeriesDataFeedInterface}.
+ * defines what timestamp ranges have already been fetched by the data feed.
  *
  * @param <K> the type parameter of the key used for the time series data table and the timestamp ranges table
  * @param <R> the time series data {@link Record} type parameter
@@ -42,15 +41,15 @@ import static org.jooq.impl.DSL.val;
 public abstract class TimeSeriesDatabaseInterface<K, R extends Record, P,
         T extends Record3<K, LocalDateTime, LocalDateTime>> {
 
-    protected DSLContext dslCreate;
+    protected DSLContext create;
 
     /**
      * Instantiates a new {@link TimeSeriesDatabaseInterface}.
      *
-     * @param dslCreate the {@link DSLContext}
+     * @param create the {@link DSLContext}
      */
-    public TimeSeriesDatabaseInterface(DSLContext dslCreate) {
-        this.dslCreate = dslCreate;
+    public TimeSeriesDatabaseInterface(DSLContext create) {
+        this.create = create;
     }
 
     /**
@@ -135,14 +134,14 @@ public abstract class TimeSeriesDatabaseInterface<K, R extends Record, P,
         checkArgument(dataPOJO != null, "The data POJO cannot be null!");
 
         // Insert the converted POJO to table record into the database data table
-        dslCreate.insertInto(getDataTable())
+        create.insertInto(getDataTable())
                 .set(getDataRecordUnmapper().unmap(dataPOJO))
                 .onDuplicateKeyIgnore()
                 .execute();
     }
 
     /**
-     * Gets the the data POJOs from this database.
+     * Gets the data POJOs from this database.
      *
      * @param key             the key
      * @param from            the 'from' (inclusive)
@@ -187,7 +186,7 @@ public abstract class TimeSeriesDatabaseInterface<K, R extends Record, P,
                 getDataTimestampTableField().desc();
 
         final RecordMapper<R, P> dataRecordMapper = getDataRecordMapper();
-        final Cursor<R> recordCursor = dslCreate.selectFrom(getDataTable())
+        final Cursor<R> recordCursor = create.selectFrom(getDataTable())
                 .where(keyEqualCondition.and(timestampRangeCondition).and(timestampFilterCondition))
                 .orderBy(orderByField)
                 .fetchSize(getDataFetchSize())
@@ -224,13 +223,13 @@ public abstract class TimeSeriesDatabaseInterface<K, R extends Record, P,
         checkArgument(to != null, "To cannot be null!");
 
         // Create the record
-        Record3<K, LocalDateTime, LocalDateTime> timestampRangesRecord = dslCreate.newRecord(getTimestampRangesTable());
+        Record3<K, LocalDateTime, LocalDateTime> timestampRangesRecord = create.newRecord(getTimestampRangesTable());
         timestampRangesRecord.set(getTimestampRangesKeyTableField(), key);
         timestampRangesRecord.set(getTimestampRangesFromTableField(), from);
         timestampRangesRecord.set(getTimestampRangesToTableField(), to);
 
         // Insert into the table (do nothing if it already exists)
-        dslCreate.insertInto(getTimestampRangesTable())
+        create.insertInto(getTimestampRangesTable())
                 .set(timestampRangesRecord)
                 .onDuplicateKeyIgnore()
                 .execute();
@@ -275,8 +274,8 @@ public abstract class TimeSeriesDatabaseInterface<K, R extends Record, P,
                 getTimestampRangesToTableField().greaterOrEqual(from));
 
         // Create ORDER BY clause
-        // We first want to order by the 'from' ASC and then by the 'to' ASC if the sortDirection is ASCENDING and
-        // order by the 'to' DESC and then by the 'from' DESC if the sortDirection is DESCENDING.
+        // We first want to order by the 'from' ASC and then by the 'to' ASC if the sortDirection is 'ASCENDING' and
+        // order by the 'to' DESC and then by the 'from' DESC if the sortDirection is 'DESCENDING'.
         OrderField<LocalDateTime> firstOrder = sortDirection == SortDirection.ASCENDING ?
                 getTimestampRangesFromTableField().asc() :
                 getTimestampRangesToTableField().desc();
@@ -284,7 +283,7 @@ public abstract class TimeSeriesDatabaseInterface<K, R extends Record, P,
                 getTimestampRangesToTableField().asc() :
                 getTimestampRangesFromTableField().desc();
 
-        return dslCreate
+        return create
                 .select(getTimestampRangesFromTableField(), getTimestampRangesToTableField())
                 .from(getTimestampRangesTable())
                 .where(keyEqualCondition.and(

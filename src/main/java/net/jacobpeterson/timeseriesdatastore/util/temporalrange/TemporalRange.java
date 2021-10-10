@@ -14,8 +14,8 @@ public class TemporalRange<T extends Temporal> {
     /**
      * Instantiates a new {@link TemporalRange}.
      *
-     * @param from the from
-     * @param to   the to
+     * @param from the 'from'
+     * @param to   the 'to'
      */
     public TemporalRange(T from, T to) {
         this.from = from;

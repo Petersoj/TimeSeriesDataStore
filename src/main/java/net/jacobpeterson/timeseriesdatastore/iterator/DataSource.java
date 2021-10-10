@@ -5,13 +5,9 @@ package net.jacobpeterson.timeseriesdatastore.iterator;
  */
 public enum DataSource {
 
-    /**
-     * The {@link DataSource} is from a database.
-     */
-    DATA_BASE,
+    /** The {@link DataSource} is from a database. */
+    DATABASE,
 
-    /**
-     * The {@link DataSource} is from a data feed.
-     */
-    DATA_FEED
+    /** The {@link DataSource} is from a datafeed. */
+    DATAFEED
 }
