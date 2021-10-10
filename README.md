@@ -1,15 +1,14 @@
-<p align="center"><a href="https://petersoj.github.io/TimeSeriesDataStore/" target="_blank"><img width="70%" src="https://raw.githubusercontent.com/Petersoj/TimeSeriesDataStore/main/.github/images/logo.png" alt="TimeSeriesDataStore"></a></p>
+<p align="center"><a href="https://petersoj.github.io/TimeSeriesDataStore/" target="_blank"><img width="70%" src="https://raw.githubusercontent.com/Petersoj/TimeSeriesDataStore/main/.github/images/logo.png" alt="TimeSeriesDataStore Logo"></a></p>
+<p align="center">
+    <a href="https://search.maven.org/artifact/net.jacobpeterson/timeseriesdatastore" target="_blank"><img src="https://img.shields.io/maven-central/v/net.jacobpeterson/timeseriesdatastore" alt="Maven Central"></a>
+    <a href="https://javadoc.io/doc/net.jacobpeterson/timeseriesdatastore" target="_blank"><img src="https://javadoc.io/badge/net.jacobpeterson/timeseriesdatastore.svg" alt="Javadocs"></a>
+    <a href="https://travis-ci.com/github/Petersoj/timeseriesdatastore" target="_blank"><img src="https://travis-ci.com/Petersoj/timeseriesdatastore.svg?branch=main" alt="Build Status"></a>
+    <a href="https://codecov.io/gh/petersoj/timeseriesdatastore"><img src="https://codecov.io/gh/petersoj/timeseriesdatastore/branch/main/graph/badge.svg" alt="CodeCov"/></a>
+    <a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/github/license/petersoj/timeseriesdatastore" alt="MIT License"></a>    
+</p>
 
 # Overview
 TimeSeriesDataStore is a Java API to store and iterate over time-series data retrieved from a data feed and stored in a database. Data from a data feed is fetched if data within a requested time range is not in a database. This data is then stored in a database for future requests. Data from a database is fetched if data within a requested time range is in a database, thus serving data much quicker than the data feed. 
-
-<p align="center">
-    <a href="https://search.maven.org/artifact/net.jacobpeterson/timeseriesdatastore" target="_blank"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/net.jacobpeterson/timeseriesdatastore"></a>
-    <a href="https://javadoc.io/doc/net.jacobpeterson/timeseriesdatastore" target="_blank"><img src="https://javadoc.io/badge/net.jacobpeterson/timeseriesdatastore.svg" alt="Javadocs"></a>
-    <a href="https://travis-ci.com/github/Petersoj/timeseriesdatastore" target="_blank"><img src="https://travis-ci.com/Petersoj/timeseriesdatastore.svg?branch=main" alt="Build Status"></a>
-    <a href="https://codecov.io/gh/petersoj/timeseriesdatastore"><img src="https://codecov.io/gh/petersoj/timeseriesdatastore/branch/main/graph/badge.svg" alt="CodeCov badge"/></a>
-    <a href="https://opensource.org/licenses/MIT" target="_blank"><img alt="GitHub" src="https://img.shields.io/github/license/petersoj/timeseriesdatastore"></a>    
-</p>
 
 # Gradle and Maven Integration
 If you are using Gradle as your build tool, add the following dependency to your `build.gradle` file:

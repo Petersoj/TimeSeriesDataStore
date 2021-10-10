@@ -2,8 +2,7 @@ language: java
 install: true
 dist: trusty
 
-jdk:
-  - oraclejdk8
+jdk: openjdk10
 
 before_script:
   - chmod +x gradlew
